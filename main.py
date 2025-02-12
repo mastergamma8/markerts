@@ -4,6 +4,7 @@ import itertools
 import datetime
 import asyncio
 from typing import Tuple
+import ssl  # Импорт модуля ssl
 
 import asyncpg
 
@@ -20,7 +21,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 # Получите переменные окружения (на локальном ПК можно задать их в файле .env или напрямую)
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "7631229383:AAHc5p2MxjdC9huvVAOTrW2uG7z-QegWT9Y") # Пример строки подключения: "postgresql://username:password@localhost:5432/market_collection"
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "7631229383:AAHc5p2MxjdC9huvVAOTrW2uG7z-QegWT9Y")
 DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:password@localhost:5432/tthbaza")
 
 # Инициализация бота (aiogram)
@@ -36,7 +37,17 @@ db_pool = None
 # ====================== Инициализация базы данных ======================
 async def init_db():
     global db_pool
-    db_pool = await asyncpg.create_pool(DATABASE_URL)
+    # Если в строке подключения не используется localhost, предполагаем удалённую базу (например, Railway)
+    # и создаём SSL контекст для зашифрованного соединения.
+    ssl_context = None
+    if "localhost" not in DATABASE_URL:
+        ssl_context = ssl.create_default_context()
+        # Отключаем проверку имени сервера и сертификата,
+        # чтобы избежать ошибок при использовании самоподписанных сертификатов.
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+
+    db_pool = await asyncpg.create_pool(DATABASE_URL, ssl=ssl_context)
     async with db_pool.acquire() as connection:
         await connection.execute("""
             CREATE TABLE IF NOT EXISTS users (
