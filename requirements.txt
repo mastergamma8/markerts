@@ -3,3 +3,4 @@ aiogram
 fastapi
 uvicorn
 Jinja2
+python-multipart
