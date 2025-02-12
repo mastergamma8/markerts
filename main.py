@@ -35,60 +35,59 @@ dp = Dispatcher()
 db_pool = None
 
 # ====================== Инициализация базы данных ======================
+
 async def init_db():
     global db_pool
-    # Если в строке подключения не используется localhost, предполагаем удалённую базу (например, Railway)
-    # и создаём SSL контекст для зашифрованного соединения.
-    ssl_context = None
-    if "localhost" not in DATABASE_URL:
-        ssl_context = ssl.create_default_context()
-        # Отключаем проверку имени сервера и сертификата,
-        # чтобы избежать ошибок при использовании самоподписанных сертификатов.
-        ssl_context.check_hostname = False
-        ssl_context.verify_mode = ssl.CERT_NONE
+    try:
+        ssl_context = None
+        if "localhost" not in DATABASE_URL:
+            ssl_context = ssl.create_default_context()
+            ssl_context.check_hostname = False
+            ssl_context.verify_mode = ssl.CERT_NONE
 
-    db_pool = await asyncpg.create_pool(DATABASE_URL, ssl=ssl_context)
-    async with db_pool.acquire() as connection:
-        await connection.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                id TEXT PRIMARY KEY,
-                username TEXT,
-                photo_url TEXT,
-                last_activation_date TEXT,
-                activation_count INTEGER,
-                balance INTEGER,
-                logged_in INTEGER,
-                login_code TEXT,
-                code_expiry DOUBLE PRECISION
-            )
-        """)
-        await connection.execute("""
-            CREATE TABLE IF NOT EXISTS tokens (
-                id SERIAL PRIMARY KEY,
-                user_id TEXT REFERENCES users(id) ON DELETE CASCADE,
-                token TEXT,
-                score INTEGER,
-                timestamp TEXT,
-                bg_color TEXT,
-                text_color TEXT
-            )
-        """)
-        await connection.execute("""
-            CREATE TABLE IF NOT EXISTS market (
-                id SERIAL PRIMARY KEY,
-                seller_id TEXT REFERENCES users(id) ON DELETE CASCADE,
-                token TEXT,
-                score INTEGER,
-                timestamp TEXT,
-                bg_color TEXT,
-                text_color TEXT,
-                price INTEGER
-            )
-        """)
-except Exception as e:
+        db_pool = await asyncpg.create_pool(DATABASE_URL, ssl=ssl_context)
+        
+        # Далее инициализация таблиц
+        async with db_pool.acquire() as connection:
+            await connection.execute("""
+                CREATE TABLE IF NOT EXISTS users (
+                    id TEXT PRIMARY KEY,
+                    username TEXT,
+                    photo_url TEXT,
+                    last_activation_date TEXT,
+                    activation_count INTEGER,
+                    balance INTEGER,
+                    logged_in INTEGER,
+                    login_code TEXT,
+                    code_expiry DOUBLE PRECISION
+                )
+            """)
+            await connection.execute("""
+                CREATE TABLE IF NOT EXISTS tokens (
+                    id SERIAL PRIMARY KEY,
+                    user_id TEXT REFERENCES users(id) ON DELETE CASCADE,
+                    token TEXT,
+                    score INTEGER,
+                    timestamp TEXT,
+                    bg_color TEXT,
+                    text_color TEXT
+                )
+            """)
+            await connection.execute("""
+                CREATE TABLE IF NOT EXISTS market (
+                    id SERIAL PRIMARY KEY,
+                    seller_id TEXT REFERENCES users(id) ON DELETE CASCADE,
+                    token TEXT,
+                    score INTEGER,
+                    timestamp TEXT,
+                    bg_color TEXT,
+                    text_color TEXT,
+                    price INTEGER
+                )
+            """)
+    except Exception as e:
         print(f"Ошибка при подключении к базе данных: {e}")
-        raise
-
+        
 # ====================== Функции для работы с базой данных ======================
 async def get_user(user_id: str):
     async with db_pool.acquire() as connection:
