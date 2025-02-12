@@ -85,6 +85,9 @@ async def init_db():
                 price INTEGER
             )
         """)
+except Exception as e:
+        print(f"Ошибка при подключении к базе данных: {e}")
+        raise
 
 # ====================== Функции для работы с базой данных ======================
 async def get_user(user_id: str):
