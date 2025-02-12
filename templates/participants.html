@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Участники</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .participant-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #ddd;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-3">
+    <h1>Участники</h1>
+    <div class="list-group">
+      {% for uid, user in users.items() %}
+        <a href="/profile/{{ uid }}" class="list-group-item list-group-item-action d-flex align-items-center">
+          {% if user.photo_url %}
+            <img src="{{ user.photo_url }}" alt="Avatar" class="participant-avatar">
+          {% else %}
+            <div class="bg-secondary text-white rounded-circle" style="width:60px; height:60px; display:flex; align-items:center; justify-content:center; margin-right:10px;">
+              {{ user.username[0]|upper }}
+            </div>
+          {% endif %}
+          <div>
+            <h5 class="mb-1">{{ user.username }}</h5>
+            <p class="mb-1">ID: {{ uid }}</p>
+            <small>Баланс: {{ user.balance }} 💎</small>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    <a class="btn btn-secondary mt-3" href="/">На главную</a>
+  </div>
+</body>
+</html>

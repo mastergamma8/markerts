@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Номера на продаже</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .token-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .token-card:hover {
+      transform: scale(1.05);
+    }
+    .token-number {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-3">
+    <h1 class="mb-4">Номера на продаже</h1>
+    <div class="row">
+      {% for listing in market %}
+        <div class="col-md-6 mb-3">
+          <div class="token-card" onclick="window.location.href='/profile/{{ listing.seller_id }}'"
+               style="background-color: {{ listing.token.bg_color }}; color: {{ listing.token.text_color }};">
+            <div class="token-number">{{ listing.token.token }}</div>
+            <p>Редкость: {{ get_rarity(listing.token.score) }}</p>
+            <p>Цена: {{ listing.price }} 💎</p>
+            <p>Продавец: {{ users.get(listing.seller_id, {}).get('username', listing.seller_id) }}</p>
+            <p>Оценка: {{ listing.token.score }}</p>
+            <form action="/buy/{{ loop.index0 }}" method="post">
+              {% if buyer_id %}
+                <input type="hidden" name="buyer_id" value="{{ buyer_id }}">
+              {% endif %}
+              <button type="submit" class="btn btn-primary btn-sm">Купить</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <a class="btn btn-secondary" href="/">На главную</a>
+  </div>
+</body>
+</html>

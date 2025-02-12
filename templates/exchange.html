@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Обмен номерами</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Обмен номерами</h1>
+    <form action="/exchange" method="post">
+      <div class="form-group">
+        <label for="user_id">Ваш Telegram ID:</label>
+        <input type="text" class="form-control" id="user_id" name="user_id" required>
+      </div>
+      <div class="form-group">
+        <label for="my_index">Номер вашего номера (1-based):</label>
+        <input type="number" class="form-control" id="my_index" name="my_index" required>
+      </div>
+      <div class="form-group">
+        <label for="target_id">Telegram ID партнёра:</label>
+        <input type="text" class="form-control" id="target_id" name="target_id" required>
+      </div>
+      <div class="form-group">
+        <label for="target_index">Номер номера партнёра (1-based):</label>
+        <input type="number" class="form-control" id="target_index" name="target_index" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Обменяться</button>
+    </form>
+    <a class="btn btn-secondary mt-3" href="/">На главную</a>
+  </div>
+</body>
+</html>
