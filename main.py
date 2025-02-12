@@ -22,7 +22,7 @@ from fastapi.templating import Jinja2Templates
 
 # Получите переменные окружения (на локальном ПК можно задать их в файле .env или напрямую)
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "7631229383:AAHc5p2MxjdC9huvVAOTrW2uG7z-QegWT9Y")
-DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:password@localhost:5432/tthbaza")
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:password@localhost:8000/tthbaza")
 
 # Инициализация бота (aiogram)
 bot = Bot(
