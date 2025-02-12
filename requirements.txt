@@ -1,0 +1,5 @@
+asyncpg
+aiogram
+fastapi
+uvicorn
+Jinja2
