@@ -13,7 +13,8 @@ from aiogram import Bot, Dispatcher, F
 from aiogram.client.bot import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.filters import Command
-from aiogram.types import Message, InputFile  # Добавлен InputFile для отправки документов
+from aiogram.types import Message
+from aiogram.types.input_file import FSInputFile  # Импортируем FSInputFile для отправки файлов
 
 # Импорт для веб-приложения
 import uvicorn
@@ -417,7 +418,7 @@ async def set_balance(message: Message) -> None:
     )
 
 @dp.message(Command("listtokens"))
-async def list_tokens(message: Message) -> None:
+async def list_tokens_admin(message: Message) -> None:
     if str(message.from_user.id) not in ADMIN_IDS:
         await message.answer("У вас нет доступа для выполнения этой команды.")
         return
@@ -441,7 +442,7 @@ async def list_tokens(message: Message) -> None:
     await message.answer(msg)
 
 @dp.message(Command("settoken"))
-async def set_token(message: Message) -> None:
+async def set_token_admin(message: Message) -> None:
     if str(message.from_user.id) not in ADMIN_IDS:
         await message.answer("У вас нет доступа для выполнения этой команды.")
         return
@@ -493,8 +494,8 @@ async def get_data_file(message: Message) -> None:
         await message.answer("Файл data.json не найден.")
         return
 
-    # Отправляем файл data.json как документ
-    document = InputFile(DATA_FILE)
+    # Отправляем файл data.json как документ, используя FSInputFile
+    document = FSInputFile(DATA_FILE)
     await message.answer_document(document=document, caption="Содержимое файла data.json")
 
 # --------------------- Веб-приложение (FastAPI) ---------------------
