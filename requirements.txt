@@ -1,4 +1,3 @@
-asyncpg
 aiogram
 fastapi
 uvicorn
