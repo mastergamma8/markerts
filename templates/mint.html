@@ -1,26 +1,16 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>Создать номер</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-  <div class="container mt-5">
-    <h1>Создать новый номер</h1>
-    {% if error %}
-      <div class="alert alert-danger">{{ error }}</div>
-    {% endif %}
-    <form action="/mint" method="post">
-      <div class="form-group">
-        <label for="user_id">Ваш Telegram ID:</label>
-        <input type="text" class="form-control" id="user_id" name="user_id" required>
-      </div>
-      <button type="submit" class="btn btn-primary">Создать номер</button>
-    </form>
-    <a class="btn btn-secondary mt-3" href="/">На главную</a>
-  </div>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Создать номер{% endblock %}
+
+{% block content %}
+  <h3>Создать новый номер</h3>
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+  <form action="/mint" method="post">
+    <div class="form-group">
+      <label for="user_id">Ваш Telegram ID:</label>
+      <input type="text" class="form-control" id="user_id" name="user_id" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Создать номер</button>
+  </form>
+{% endblock %}
