@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Моя галерея{% endblock %}
+
+{% block content %}
+  <h3>Мои номера</h3>
+  {% if user and user.tokens %}
+    <div class="row">
+      {% for token in user.tokens %}
+        <div class="col-md-6 mb-3">
+          <div class="card" style="cursor:pointer;" onclick="alert('Здесь можно выбрать действие: Продать или Обменять')">
+            <div class="card-body text-center" style="background-color: {{ token.bg_color }}; color: {{ token.text_color }};">
+              <h4>{{ token.token }}</h4>
+              <p>Оценка: {{ token.score }}</p>
+              <p><small>{{ token.timestamp }}</small></p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>У вас нет номеров.</p>
+  {% endif %}
+{% endblock %}
