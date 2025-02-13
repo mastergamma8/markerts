@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}TTH Market{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/custom.css">
+  <style>
+    body.dark {
+      background-color: #121212;
+      color: #f0f0f0;
+    }
+    /* Верхняя панель */
+    .navbar {
+      padding: 0.5rem 1rem;
+    }
+    .navbar-brand {
+      font-size: 1.5rem;
+    }
+    /* Нижняя фиксированная навигация */
+    .navbar-fixed-bottom {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      z-index: 999;
+    }
+    .nav-link img {
+      width: 30px;
+      height: 30px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Верхняя панель -->
+  <nav class="navbar navbar-light bg-light justify-content-between">
+    <a class="navbar-brand" href="/market">TTH Market</a>
+    <div>
+      {% if user %}
+        <span style="margin-right:10px;">
+          <img src="/static/image/diamond.png" alt="Diamond" style="width:20px; height:20px;">
+          {{ user.balance }}
+        </span>
+        <button class="btn btn-sm btn-outline-secondary" id="theme-toggle">Сменить тему</button>
+        <a href="/logout" class="btn btn-sm btn-outline-danger ml-2">Выйти</a>
+      {% else %}
+        <a href="/login" class="btn btn-sm btn-outline-primary mr-2">Войти</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <div class="container mt-3">
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- Нижняя панель навигации -->
+  <nav class="navbar navbar-light bg-light navbar-fixed-bottom justify-content-around">
+    <!-- Market -->
+    <a class="nav-link" href="/market">
+      <img src="/static/image/market.png" alt="Market">
+    </a>
+    <!-- Gallery -->
+    {% if user %}
+      <a class="nav-link" href="/gallery">
+        <img src="/static/image/gallery.png" alt="Gallery">
+      </a>
+      <a class="nav-link" href="/mint">
+        <img src="/static/image/create.png" alt="Create">
+      </a>
+    {% else %}
+      <a class="nav-link" href="/login">
+        <img src="/static/image/gallery.png" alt="Gallery">
+      </a>
+      <a class="nav-link" href="/login">
+        <img src="/static/image/create.png" alt="Create">
+      </a>
+    {% endif %}
+    <!-- Participants -->
+    <a class="nav-link" href="/participants">
+      <img src="/static/image/participants.png" alt="Participants">
+    </a>
+    <!-- Profile / Login -->
+    {% if user %}
+      <a class="nav-link" href="/profile/{{ user_id }}">
+        <img src="/static/image/profile.png" alt="Profile">
+      </a>
+    {% else %}
+      <a class="nav-link" href="/login">
+        <img src="/static/image/profile.png" alt="Login">
+      </a>
+    {% endif %}
+  </nav>
+
+  <script>
+    document.getElementById("theme-toggle")?.addEventListener("click", function(){
+      document.body.classList.toggle("dark");
+    });
+  </script>
+</body>
+</html>
