@@ -1,23 +1,15 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>Подтверждение входа</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-  <div class="container mt-5">
-    <h1>Подтверждение входа</h1>
-    <p>На указанный Telegram ID отправлен код подтверждения. Введите его ниже:</p>
-    <form action="/verify" method="post">
-      <input type="hidden" name="user_id" value="{{ user_id }}">
-      <div class="form-group">
-        <label for="code">Код подтверждения:</label>
-        <input type="text" class="form-control" id="code" name="code" required>
-      </div>
-      <button type="submit" class="btn btn-primary">Подтвердить вход</button>
-    </form>
-  </div>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Подтверждение входа{% endblock %}
+
+{% block content %}
+  <h3>Подтверждение входа</h3>
+  <p>На указанный Telegram ID отправлен код подтверждения. Введите его ниже:</p>
+  <form action="/verify" method="post">
+    <input type="hidden" name="user_id" value="{{ user_id }}">
+    <div class="form-group">
+      <label for="code">Код подтверждения:</label>
+      <input type="text" class="form-control" id="code" name="code" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Подтвердить</button>
+  </form>
+{% endblock %}
