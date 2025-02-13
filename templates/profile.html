@@ -1,60 +1,43 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>Профиль пользователя</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    .profile-avatar-large {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #ddd;
-    }
-  </style>
-</head>
-<body>
-  <div class="container mt-3">
-    <div class="d-flex align-items-center mb-3">
-      {% if user.photo_url %}
-        <img src="{{ user.photo_url }}" alt="Avatar" class="profile-avatar-large mr-3">
-      {% else %}
-        <div class="bg-secondary text-white rounded-circle mr-3" style="width:100px; height:100px; display:flex; align-items:center; justify-content:center;">
-          Профиль
-        </div>
-      {% endif %}
-      <div>
-        <h2>{{ user.username }}</h2>
-        <p>ID: {{ user_id }}</p>
-        <p>Баланс: {{ user.balance }} 💎</p>
-      </div>
-    </div>
-    {% if is_owner %}
-      <h3>Мои номера</h3>
+{% extends "base.html" %}
+{% block title %}Профиль пользователя{% endblock %}
+
+{% block content %}
+  <div class="d-flex align-items-center mb-3">
+    {% if user.photo_url %}
+      <img src="{{ user.photo_url }}" alt="Avatar" style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:2px solid #ddd; margin-right:15px;">
     {% else %}
-      <h3>Номера пользователя {{ user.username }}</h3>
+      <div class="bg-secondary text-white rounded-circle mr-3" style="width:100px; height:100px; display:flex; align-items:center; justify-content:center;">
+        Профиль
+      </div>
     {% endif %}
-    {% if user.tokens %}
-      <div class="row">
-        {% for token in user.tokens %}
-          <div class="col-md-6 mb-3">
-            <div class="card">
-              <div class="card-body text-center" style="background-color: {{ token.bg_color }}; color: {{ token.text_color }};">
-                <h4 class="card-title">{{ token.token }}</h4>
-                <p class="card-text">Оценка: {{ token.score }}</p>
-                <p class="card-text"><small>{{ token.timestamp }}</small></p>
-              </div>
+    <div>
+      <h2>{{ user.username }}</h2>
+      <p>ID: {{ user_id }}</p>
+      <p>Баланс: {{ user.balance }} 💎</p>
+    </div>
+  </div>
+
+  {% if is_owner %}
+    <h4>Мои номера</h4>
+  {% else %}
+    <h4>Номера пользователя {{ user.username }}</h4>
+  {% endif %}
+
+  {% if user.tokens %}
+    <div class="row">
+      {% for token in user.tokens %}
+        <div class="col-md-6 mb-3">
+          <div class="card">
+            <div class="card-body text-center" style="background-color: {{ token.bg_color }}; color: {{ token.text_color }};">
+              <h4>{{ token.token }}</h4>
+              <p>Оценка: {{ token.score }}</p>
+              <p><small>{{ token.timestamp }}</small></p>
             </div>
           </div>
-        {% endfor %}
-      </div>
-    {% else %}
-      <p>У вас нет номеров.</p>
-    {% endif %}
-    <a class="btn btn-secondary mt-3" href="/">На главную</a>
-  </div>
-</body>
-</html>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>У вас нет номеров.</p>
+  {% endif %}
+{% endblock %}
